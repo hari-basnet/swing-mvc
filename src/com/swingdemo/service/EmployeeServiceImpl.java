@@ -3,8 +3,10 @@ package com.swingdemo.service;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.swingdemo.db.Database;
@@ -71,16 +73,33 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public List<Employee> getAllEmp() {
 		
+		List<Employee> employees = new ArrayList<>();
+		
 		String sql = "SELECT * from employee";
 		
 		try {
 			Statement stmt = conn.createStatement();
-			stmt.execute(sql);
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				
+				Employee emp = new Employee();
+				
+				emp.setFirstName(rs.getString("first_name"));
+				emp.setLastName(rs.getString("last_name"));
+				emp.setEmail(rs.getString("email"));
+				emp.setPhoneNumber("phone_number");
+				emp.setCountry(rs.getString("country"));
+				emp.setPost(rs.getString("post"));
+				
+				employees.add(emp);
+				
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		return null;
+		return employees;
 	}
 
 	@Override

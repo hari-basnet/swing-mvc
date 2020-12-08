@@ -29,6 +29,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
@@ -138,6 +139,7 @@ public class EmployeeView extends JFrame {
 		contentPane.add(getOtherRadioButton());
 		contentPane.add(getDobDateChooser());
 		contentPane.add(getJoinedAtDateChooser());
+		listEmployees();
 	}
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
@@ -401,34 +403,7 @@ public class EmployeeView extends JFrame {
 						JOptionPane.showMessageDialog(contentPane, "Databse insert failure!");
 					}
 					
-				
-					
-					// Insert data into table 
-					
-					/*
-					 * String selectQuery =
-					 * "select * from employee where first_name = '"+firstName+"'"; ResultSet rs =
-					 * null; try { stmt = conn.createStatement(); rs =
-					 * stmt.executeQuery(selectQuery); } catch (SQLException e1) {
-					 * e1.printStackTrace(); }
-					 * 
-					 * try { while(rs.next()) { String nameForTable = rs.getString("first_name") +
-					 * rs.getString("last_name"); String emailForTable = rs.getString("email");
-					 * String phoneNumberTable = rs.getString("phone_number"); String countryTable =
-					 * rs.getString("country"); String position = rs.getString("post");
-					 * 
-					 * DefaultTableModel model = (DefaultTableModel) table.getModel();
-					 * 
-					 * model.addRow(new Object[] {nameForTable, emailForTable, phoneNumberTable,
-					 * countryTable, position}); }
-					 * 
-					 * 
-					 * } catch (SQLException e1) { e1.printStackTrace(); }
-					 */
-					
-					
-					
-					
+					listEmployees();
 					clearFields();
 					
 					System.out.println("how is the connection ");
@@ -533,6 +508,7 @@ public class EmployeeView extends JFrame {
 		postTextField.setText("");
 		salaryTextField.setText("");
 	}
+	
 	private JDateChooser getDobDateChooser() {
 		if (dobDateChooser == null) {
 			dobDateChooser = new JDateChooser();
@@ -540,11 +516,31 @@ public class EmployeeView extends JFrame {
 		}
 		return dobDateChooser;
 	}
+	
 	private JDateChooser getJoinedAtDateChooser() {
 		if (joinedAtDateChooser == null) {
 			joinedAtDateChooser = new JDateChooser();
 			joinedAtDateChooser.setBounds(153, 429, 74, 20);
 		}
 		return joinedAtDateChooser;
+	}
+
+	private void listEmployees() {
+		
+		try {
+		
+			List<Employee> employees = employeeService.getAllEmp();
+			
+			DefaultTableModel model = (DefaultTableModel) table.getModel();
+			
+			for(Employee emp : employees) {
+				
+				model.addRow(new Object[] {emp.getFirstName() + emp.getLastName(), emp.getEmail(), emp.getPhoneNumber(), emp.getCountry(), emp.getPost()});
+				
+			}
+			
+			}catch (Exception e1) {
+				e1.printStackTrace();
+			}
 	}
 }
