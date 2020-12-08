@@ -55,19 +55,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public boolean deleteEmp(int id) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean updateEmp(Employee emp) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public Employee getById(int id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -78,6 +75,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		
 		try {
 			Statement stmt = conn.createStatement();
+			stmt.execute(sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -87,7 +85,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<Employee> search(String input) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
