@@ -377,13 +377,11 @@ public class EmployeeView extends JFrame {
 					
 					employee.setFirstName(firstNameTextField.getText());
 					employee.setLastName(lastNameTextField.getText());
-					int age;
-					if(ageTextField.getText().isEmpty()) {
+					if(!salaryTextField.getText().equals(Integer.TYPE)) {
+						JOptionPane.showMessageDialog(contentPane, "Numbers required in Age field");
 						return;
-					}else {
-						age = Integer.valueOf(ageTextField.getText());
 					}
-					employee.setAge(age);
+					employee.setAge(Integer.parseInt(ageTextField.getText()));
 					employee.setGender(resolveGender());
 					employee.setCompany(companyTextField.getText());
 					employee.setEmail(getEmailTextField().getText());
@@ -392,7 +390,11 @@ public class EmployeeView extends JFrame {
 					employee.setCountry(countryTextField.getText());
 					employee.setAddress(addressTextField.getText());
 					employee.setPost(postTextField.getText());
-					employee.setSalary(Integer.valueOf(salaryTextField.getText()));
+					if(!salaryTextField.getText().equals(Integer.TYPE)) {
+						JOptionPane.showMessageDialog(contentPane, "Numbers required in Salary field");
+						return;
+					}
+					employee.setSalary(Integer.parseInt(salaryTextField.getText()));
 					employee.setDob(new Date(dobDateChooser.getDate().getTime()));
 					employee.setJoiningDate(new Date(joinedAtDateChooser.getDate().getTime()));
 					
@@ -507,12 +509,13 @@ public class EmployeeView extends JFrame {
 		countryTextField.setText("");
 		postTextField.setText("");
 		salaryTextField.setText("");
+		dobDateChooser.setCalendar(null);
 	}
 	
 	private JDateChooser getDobDateChooser() {
 		if (dobDateChooser == null) {
 			dobDateChooser = new JDateChooser();
-			dobDateChooser.setBounds(153, 399, 74, 20);
+			dobDateChooser.setBounds(153, 399, 127, 20);
 		}
 		return dobDateChooser;
 	}
@@ -520,7 +523,7 @@ public class EmployeeView extends JFrame {
 	private JDateChooser getJoinedAtDateChooser() {
 		if (joinedAtDateChooser == null) {
 			joinedAtDateChooser = new JDateChooser();
-			joinedAtDateChooser.setBounds(153, 429, 74, 20);
+			joinedAtDateChooser.setBounds(153, 429, 127, 20);
 		}
 		return joinedAtDateChooser;
 	}
