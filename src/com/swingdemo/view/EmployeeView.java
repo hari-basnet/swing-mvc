@@ -535,7 +535,7 @@ public class EmployeeView extends JFrame {
 			
 			for(Employee emp : employees) {
 				
-				model.addRow(new Object[] {emp.getFirstName() + emp.getLastName(), emp.getEmail(), emp.getPhoneNumber(), emp.getCountry(), emp.getPost()});
+				model.addRow(new Object[] {emp.getFirstName() + " " + emp.getLastName(), emp.getEmail(), emp.getPhoneNumber(), emp.getCountry(), emp.getPost()});
 				
 			}
 			
