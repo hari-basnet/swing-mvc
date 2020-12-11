@@ -62,6 +62,33 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public boolean updateEmp(Employee emp) {
+		
+		String sql = "update employee set first_name=?, last_name=?, age=?, gender=?, email=?, phone_number=?, country=?, company=?, address=?, city=?, post=?, date_of_birth=?, joined_at=?, salary=? where id=?";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, emp.getFirstName());
+			pstmt.setString(2, emp.getLastName());
+			pstmt.setInt(3, emp.getAge());
+			pstmt.setString(4, emp.getGender());
+			pstmt.setString(5, emp.getEmail());
+			pstmt.setString(6, emp.getPhoneNumber());
+			pstmt.setString(7, emp.getCountry());
+			pstmt.setString(8, emp.getCompany());
+			pstmt.setString(9, emp.getAddress());
+			pstmt.setString(10, emp.getCity());
+			pstmt.setDate(11, (Date) emp.getDob());
+			pstmt.setDate(12, (Date) emp.getJoiningDate());
+			pstmt.setInt(13, emp.getId());
+			
+			pstmt.execute();
+			return true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		return false;
 	}
 

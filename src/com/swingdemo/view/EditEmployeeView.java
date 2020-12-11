@@ -35,11 +35,9 @@ import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import com.toedter.calendar.JDateChooser;
 
-public class EmployeeView extends JFrame {
+public class EditEmployeeView extends JFrame {
 
 	private JPanel contentPane;
-	private JScrollPane scrollPane;
-	private JTable table;
 	private JLabel firstNameLabel;
 	private JLabel lastNameLabel;
 	private JLabel ageLabel;
@@ -66,9 +64,6 @@ public class EmployeeView extends JFrame {
 	private JTextField postTextField;
 	private JTextField salaryTextField;
 	private JButton saveButton;
-	private JButton editButton;
-	private JButton deleteButton;
-	private JButton clearButton;
 	private JRadioButton maleRadioButton;
 	private JRadioButton femaleRadioButton;
 	private JRadioButton otherRadioButton;
@@ -78,6 +73,7 @@ public class EmployeeView extends JFrame {
 
 	private Employee employee = new Employee();
 	private EmployeeService employeeService = new EmployeeServiceImpl();
+	private JButton cancelButton;
 	/**
 	 * Launch the application.
 	 */
@@ -85,7 +81,7 @@ public class EmployeeView extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					EmployeeView frame = new EmployeeView();
+					EditEmployeeView frame = new EditEmployeeView();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -97,14 +93,13 @@ public class EmployeeView extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public EmployeeView() {
+	public EditEmployeeView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1140, 637);
+		setBounds(100, 100, 502, 637);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		contentPane.add(getScrollPane());
 		contentPane.add(getFirstNameLabel());
 		contentPane.add(getLastNameLabel());
 		contentPane.add(getAgeLabel());
@@ -131,36 +126,12 @@ public class EmployeeView extends JFrame {
 		contentPane.add(getPostTextField());
 		contentPane.add(getSalaryTextField());
 		contentPane.add(getSaveButton());
-		contentPane.add(getEditButton());
-		contentPane.add(getDeleteButton());
-		contentPane.add(getClearButton());
 		contentPane.add(getMaleRadioButton());
 		contentPane.add(getFemaleRadioButton());
 		contentPane.add(getOtherRadioButton());
 		contentPane.add(getDobDateChooser());
 		contentPane.add(getJoinedAtDateChooser());
-		listEmployees();
-	}
-	private JScrollPane getScrollPane() {
-		if (scrollPane == null) {
-			scrollPane = new JScrollPane();
-			scrollPane.setBounds(563, 11, 551, 576);
-			scrollPane.setViewportView(getTable());
-		}
-		return scrollPane;
-	}
-	private JTable getTable() {
-		if (table == null) {
-			table = new JTable();
-			table.setModel(new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-					"Name", "Email", "Phone Number", "Country", "Position"
-				}
-			));
-		}
-		return table;
+		contentPane.add(getCancelButton());
 	}
 	private JLabel getFirstNameLabel() {
 		if (firstNameLabel == null) {
@@ -362,6 +333,7 @@ public class EmployeeView extends JFrame {
 		}
 		return salaryTextField;
 	}
+	
 	private JButton getSaveButton() {
 		if (saveButton == null) {
 			saveButton = new JButton("Save");
@@ -398,55 +370,33 @@ public class EmployeeView extends JFrame {
 					employee.setDob(new Date(dobDateChooser.getDate().getTime()));
 					employee.setJoiningDate(new Date(joinedAtDateChooser.getDate().getTime()));
 					
-					if(employeeService.addEmp(employee)) {
-						JOptionPane.showMessageDialog(contentPane, "Database insert successfully!");
+					if(employeeService.updateEmp(employee)) {
+						JOptionPane.showMessageDialog(contentPane, "Database update successfully!");
+						new EmployeeView().setVisible(true);
+						dispose();
 						
 					}else {
-						JOptionPane.showMessageDialog(contentPane, "Databse insert failure!");
+						JOptionPane.showMessageDialog(contentPane, "Database update failure!");
 					}
-					
-					listEmployees();
 					clearFields();
-					
-					System.out.println("how is the connection ");
 				}
 			});
 			saveButton.setBackground(new Color(0, 153, 0));
 			saveButton.setOpaque(true);
-			saveButton.setBounds(68, 518, 89, 23);
+			saveButton.setBounds(101, 512, 89, 23);
 		}
 		return saveButton;
 	}
-	private JButton getEditButton() {
-		if (editButton == null) {
-			editButton = new JButton("Edit");
-			editButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					
-					EditEmployeeView editEmployeeView = new EditEmployeeView();
-					editEmployeeView.setLocationRelativeTo(contentPane);
-					editEmployeeView.setVisible(true);
-					dispose();
-				}
-			});
-			editButton.setBounds(172, 518, 89, 23);
+	
+
+	private JButton getCancelButton() {
+		if (cancelButton == null) {
+			cancelButton = new JButton("Cancel");
+			cancelButton.setBounds(203, 512, 89, 23);
 		}
-		return editButton;
+		return cancelButton;
 	}
-	private JButton getDeleteButton() {
-		if (deleteButton == null) {
-			deleteButton = new JButton("Delete");
-			deleteButton.setBounds(281, 518, 89, 23);
-		}
-		return deleteButton;
-	}
-	private JButton getClearButton() {
-		if (clearButton == null) {
-			clearButton = new JButton("Clear All");
-			clearButton.setBounds(388, 518, 89, 23);
-		}
-		return clearButton;
-	}
+	
 	private JRadioButton getMaleRadioButton() {
 		if (maleRadioButton == null) {
 			maleRadioButton = new JRadioButton("Male");
@@ -470,6 +420,23 @@ public class EmployeeView extends JFrame {
 			otherRadioButton.setBounds(402, 99, 109, 23);
 		}
 		return otherRadioButton;
+	}
+	
+
+	private JDateChooser getDobDateChooser() {
+		if (dobDateChooser == null) {
+			dobDateChooser = new JDateChooser();
+			dobDateChooser.setBounds(153, 399, 127, 20);
+		}
+		return dobDateChooser;
+	}
+	
+	private JDateChooser getJoinedAtDateChooser() {
+		if (joinedAtDateChooser == null) {
+			joinedAtDateChooser = new JDateChooser();
+			joinedAtDateChooser.setBounds(153, 429, 127, 20);
+		}
+		return joinedAtDateChooser;
 	}
 	
 	private String resolveGender() {
@@ -521,38 +488,5 @@ public class EmployeeView extends JFrame {
 		dobDateChooser.setCalendar(null);
 	}
 	
-	private JDateChooser getDobDateChooser() {
-		if (dobDateChooser == null) {
-			dobDateChooser = new JDateChooser();
-			dobDateChooser.setBounds(153, 399, 127, 20);
-		}
-		return dobDateChooser;
-	}
-	
-	private JDateChooser getJoinedAtDateChooser() {
-		if (joinedAtDateChooser == null) {
-			joinedAtDateChooser = new JDateChooser();
-			joinedAtDateChooser.setBounds(153, 429, 127, 20);
-		}
-		return joinedAtDateChooser;
-	}
 
-	private void listEmployees() {
-		
-		try {
-		
-			List<Employee> employees = employeeService.getAllEmp();
-			
-			DefaultTableModel model = (DefaultTableModel) table.getModel();
-			
-			for(Employee emp : employees) {
-				
-				model.addRow(new Object[] {emp.getFirstName() + " " + emp.getLastName(), emp.getEmail(), emp.getPhoneNumber(), emp.getCountry(), emp.getPost()});
-				
-			}
-			
-			}catch (Exception e1) {
-				e1.printStackTrace();
-			}
-	}
 }
