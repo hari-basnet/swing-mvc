@@ -94,7 +94,32 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Employee getById(int id) {
-		return null;
+		Employee  emp = new Employee();
+
+		String sql ="select * from employee where id = "+id;
+		try {
+			Statement stm = conn.createStatement();
+			ResultSet  rs = stm.executeQuery(sql);
+
+			if(rs.next()) {
+
+				emp.setId(rs.getInt("id"));
+				emp.setFirstName(rs.getString("first_name"));
+				emp.setLastName(rs.getString("last_name"));
+				emp.setCompany(rs.getString("company"));
+				emp.setPhoneNumber(rs.getString("phone_number"));
+				emp.setGender(rs.getString("gender"));
+				emp.setAge(rs.getInt("age"));
+				emp.setSalary(rs.getInt("salary"));
+				emp.setDob(rs.getDate("date_of_birth"));
+				emp.setJoiningDate(rs.getDate("joined_at"));
+				emp.setCountry(rs.getString("country"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return emp;
 	}
 
 	@Override
@@ -112,12 +137,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 				
 				Employee emp = new Employee();
 				
+				emp.setId(rs.getInt("id"));
 				emp.setFirstName(rs.getString("first_name"));
 				emp.setLastName(rs.getString("last_name"));
 				emp.setEmail(rs.getString("email"));
 				emp.setPhoneNumber("phone_number");
 				emp.setCountry(rs.getString("country"));
-				emp.setPost(rs.getString("post"));
 				
 				employees.add(emp);
 				

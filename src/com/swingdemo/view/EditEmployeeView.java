@@ -74,6 +74,8 @@ public class EditEmployeeView extends JFrame {
 	private Employee employee = new Employee();
 	private EmployeeService employeeService = new EmployeeServiceImpl();
 	private JButton cancelButton;
+	
+	private int employeeId = 0;
 	/**
 	 * Launch the application.
 	 */
@@ -344,12 +346,9 @@ public class EditEmployeeView extends JFrame {
 					Database db = new Database();
 					Connection conn = db.createConnection();
 					
-					validateInputs();
-					
-					
 					employee.setFirstName(firstNameTextField.getText());
 					employee.setLastName(lastNameTextField.getText());
-					if(!salaryTextField.getText().equals(Integer.TYPE)) {
+					if(!Integer.valueOf(ageTextField.getText()).equals(Integer.TYPE)) {
 						JOptionPane.showMessageDialog(contentPane, "Numbers required in Age field");
 						return;
 					}
@@ -362,7 +361,7 @@ public class EditEmployeeView extends JFrame {
 					employee.setCountry(countryTextField.getText());
 					employee.setAddress(addressTextField.getText());
 					employee.setPost(postTextField.getText());
-					if(!salaryTextField.getText().equals(Integer.TYPE)) {
+					if(!Integer.valueOf(salaryTextField.getText()).equals(Integer.TYPE)) {
 						JOptionPane.showMessageDialog(contentPane, "Numbers required in Salary field");
 						return;
 					}
@@ -392,6 +391,12 @@ public class EditEmployeeView extends JFrame {
 	private JButton getCancelButton() {
 		if (cancelButton == null) {
 			cancelButton = new JButton("Cancel");
+			cancelButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					new EmployeeView().setVisible(true);
+					dispose();
+				}
+			});
 			cancelButton.setBounds(203, 512, 89, 23);
 		}
 		return cancelButton;
@@ -453,25 +458,6 @@ public class EditEmployeeView extends JFrame {
 		return genderValue;
 	}
 	
-	private void validateInputs() {
-		
-		if(firstNameTextField.getText().isEmpty() || 
-				lastNameTextField.getText().isEmpty() ||
-				ageTextField.getText().isEmpty() || 
-				emailTextField.getText().isEmpty() || 
-				companyTextField.getText().isEmpty() ||
-				phoneTextField.getText().isEmpty() ||
-				cityTextField.getText().isEmpty() ||
-				addressTextField.getText().isEmpty() ||
-				countryTextField.getText().isEmpty() ||
-				postTextField.getText().isEmpty()
-				) {
-			JOptionPane.showMessageDialog(contentPane, "Fields are required");
-			return;
-		}
-	
-	}
-	
 	private void clearFields() {
 		
 		firstNameTextField.setText("");
@@ -485,7 +471,36 @@ public class EditEmployeeView extends JFrame {
 		countryTextField.setText("");
 		postTextField.setText("");
 		salaryTextField.setText("");
-		dobDateChooser.setCalendar(null);
+	}
+
+	public void setData(int id) {
+		
+		this.employeeId = id;
+		
+		Employee employee = employeeService.getById(id);
+		
+		
+
+		firstNameTextField.setText(employee.getFirstName());
+		lastNameTextField.setText(employee.getLastName());
+		ageTextField.setText(String.valueOf(employee.getAge()));
+		
+		if(employee.getGender().equalsIgnoreCase("male")) {
+			maleRadioButton.setSelected(true);
+		}else if(employee.getGender().equalsIgnoreCase("female")){
+			femaleRadioButton.setSelected(true);
+		}else {
+			otherRadioButton.setSelected(true);
+		}
+		emailTextField.setText(employee.getEmail());
+		companyTextField.setText(employee.getCompany());
+		phoneTextField.setText(employee.getPhoneNumber());
+		cityTextField.setText(employee.getCity());
+		addressTextField.setText(employee.getAddress());
+		countryTextField.setText(employee.getCountry());
+		postTextField.setText(employee.getPost());
+		salaryTextField.setText(String.valueOf(employee.getSalary()));
+		
 	}
 	
 

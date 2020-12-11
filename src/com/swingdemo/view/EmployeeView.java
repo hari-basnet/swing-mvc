@@ -144,7 +144,7 @@ public class EmployeeView extends JFrame {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(563, 11, 551, 576);
+			scrollPane.setBounds(573, 12, 551, 576);
 			scrollPane.setViewportView(getTable());
 		}
 		return scrollPane;
@@ -156,7 +156,7 @@ public class EmployeeView extends JFrame {
 				new Object[][] {
 				},
 				new String[] {
-					"Name", "Email", "Phone Number", "Country", "Position"
+					"Id", "Name", "Email", "Phone Number", "Country"
 				}
 			));
 		}
@@ -377,7 +377,7 @@ public class EmployeeView extends JFrame {
 					
 					employee.setFirstName(firstNameTextField.getText());
 					employee.setLastName(lastNameTextField.getText());
-					if(!salaryTextField.getText().equals(Integer.TYPE)) {
+					if(!ageTextField.getText().matches("^(0|-*[1-9]+[0-9]*)$")) {
 						JOptionPane.showMessageDialog(contentPane, "Numbers required in Age field");
 						return;
 					}
@@ -390,7 +390,7 @@ public class EmployeeView extends JFrame {
 					employee.setCountry(countryTextField.getText());
 					employee.setAddress(addressTextField.getText());
 					employee.setPost(postTextField.getText());
-					if(!salaryTextField.getText().equals(Integer.TYPE)) {
+					if(!salaryTextField.getText().matches("^(0|-*[1-9]+[0-9]*)$")) {
 						JOptionPane.showMessageDialog(contentPane, "Numbers required in Salary field");
 						return;
 					}
@@ -423,9 +423,20 @@ public class EmployeeView extends JFrame {
 			editButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
+					if(table.getSelectedRow() < 0) {
+						JOptionPane.showMessageDialog(contentPane, "Please select a row to edit...");
+						return;
+					}
+					
+					int row = table.getSelectedRow();
+					int id = (int) table.getModel().getValueAt(row, 0);
+					
 					EditEmployeeView editEmployeeView = new EditEmployeeView();
 					editEmployeeView.setLocationRelativeTo(contentPane);
+					editEmployeeView.setData(id);
 					editEmployeeView.setVisible(true);
+					
+					
 					dispose();
 				}
 			});
@@ -518,7 +529,6 @@ public class EmployeeView extends JFrame {
 		countryTextField.setText("");
 		postTextField.setText("");
 		salaryTextField.setText("");
-		dobDateChooser.setCalendar(null);
 	}
 	
 	private JDateChooser getDobDateChooser() {
@@ -547,7 +557,7 @@ public class EmployeeView extends JFrame {
 			
 			for(Employee emp : employees) {
 				
-				model.addRow(new Object[] {emp.getFirstName() + " " + emp.getLastName(), emp.getEmail(), emp.getPhoneNumber(), emp.getCountry(), emp.getPost()});
+				model.addRow(new Object[] {emp.getId(), emp.getFirstName() + " " + emp.getLastName(), emp.getEmail(), emp.getPhoneNumber(), emp.getCountry()});
 				
 			}
 			
