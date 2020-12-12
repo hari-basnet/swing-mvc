@@ -106,14 +106,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 				emp.setId(rs.getInt("id"));
 				emp.setFirstName(rs.getString("first_name"));
 				emp.setLastName(rs.getString("last_name"));
+				emp.setAge(rs.getInt("age"));
+				emp.setGender(rs.getString("gender"));
 				emp.setCompany(rs.getString("company"));
 				emp.setPhoneNumber(rs.getString("phone_number"));
-				emp.setGender(rs.getString("gender"));
-				emp.setAge(rs.getInt("age"));
+				emp.setAddress(rs.getString("address"));
+				emp.setCity(rs.getString("city"));
+				emp.setCountry(rs.getString("country"));
+				emp.setPost(rs.getString("psot"));
 				emp.setSalary(rs.getInt("salary"));
 				emp.setDob(rs.getDate("date_of_birth"));
 				emp.setJoiningDate(rs.getDate("joined_at"));
-				emp.setCountry(rs.getString("country"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -141,7 +144,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 				emp.setFirstName(rs.getString("first_name"));
 				emp.setLastName(rs.getString("last_name"));
 				emp.setEmail(rs.getString("email"));
-				emp.setPhoneNumber("phone_number");
+				emp.setPhoneNumber(rs.getString("phone_number"));
 				emp.setCountry(rs.getString("country"));
 				
 				employees.add(emp);
